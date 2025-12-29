@@ -1,0 +1,31 @@
+{
+  "title": "MVP Eleventy",
+  "description": "MVP.css with Eleventy static site generator",
+  "url": "https://example.com",
+  "favicon": "/images/crow.png",
+  "logo": "/images/crow.svg",
+  "dark-mode-logo": "/images/crow-invert.svg",
+  "language": "en",
+  "author": {
+    "name": "Your Name",
+    "email": "hello@example.com"
+  },
+  "navigation": [
+    {
+      "title": "Home",
+      "url": "/"
+    },
+    {
+      "title": "About",
+      "url": "/about/"
+    },
+    {
+      "title": "Contact",
+      "url": "/contact/"
+    },
+    {
+      "title": "Blog",
+      "url": "/blog/"
+    }
+  ]
+}

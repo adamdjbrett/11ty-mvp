@@ -1,0 +1,33 @@
+---
+layout: false
+permalink: /feed/feed.json
+eleventyExcludeFromCollections: true
+---
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": "{{ metadata.title }}",
+  "home_page_url": "{{ metadata.url }}/",
+  "feed_url": "{{ metadata.url }}/feed/feed.json",
+  "description": "{{ metadata.description }}",
+  "language": "{{ metadata.language }}",
+  "authors": [
+    {
+      "name": "{{ metadata.author.name }}",
+      "url": "{{ metadata.url }}"
+    }
+  ],
+  "items": [
+    {%- for post in collections.posts | reverse | limit(20) %}
+    {
+      "id": "{{ metadata.url }}{{ post.url }}",
+      "url": "{{ metadata.url }}{{ post.url }}",
+      "title": "{{ post.data.title }}",
+      "content_html": {{ post.templateContent | safe | jsonify }},
+      "date_published": "{{ post.date | dateToRfc3339 }}"
+      {%- if post.data.tags %},
+      "tags": {{ post.data.tags | jsonify }}
+      {%- endif %}
+    }{% if not loop.last %},{% endif %}
+    {%- endfor %}
+  ]
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="{{ metadata.logo }}" type="image/png">
+    <link rel="stylesheet" href="/css/style.css">
+    <meta charset="utf-8">
+    <meta name="description" content="{{ description or 'My description' }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or 'My Site' }}</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/"><img id="logo" alt="Logo" src="{{ metadata.logo }}" height="70"></a>
+            <ul>
+                {%- for item in metadata.navigation %}
+                <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+                {%- endfor %}
+            </ul>
+        </nav>
+        <h1>{{ heading or title }}</h1>
+        {% if subheading %}<p>{{ subheading }}</p>{% endif %}
+    </header>
+    <main>
+        {{ content | safe }}
+    </main>
+    <footer>
+        <hr>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <p><small>Contact info <a href="{{ metadata.author.url }}">{{ metadata.author.name }}</a> | <a href="mailto:{{ metadata.author.email }}">{{ metadata.author.email }}</a></small></p>
+            <button id="theme-toggle" aria-label="Toggle theme" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; padding: 0.5rem;">
+                <span class="theme-toggle-icon"></span>
+            </button>
+        </div>
+    </footer>
+    <script>
+        const storageKey = 'theme-preference';
+        
+        const getColorPreference = () => {
+            if (localStorage.getItem(storageKey))
+                return localStorage.getItem(storageKey);
+            else
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        };
+        
+        const setPreference = () => {
+            localStorage.setItem(storageKey, theme.value);
+            reflectPreference();
+        };
+        
+        const reflectPreference = () => {
+            document.documentElement.setAttribute('data-theme', theme.value);
+            document.querySelector('.theme-toggle-icon').textContent = theme.value === 'dark' ? '☀️' : '🌙';
+            
+            // Switch logo based on theme
+            const logo = document.getElementById('logo');
+            const darkModeLogoUrl = '{{ metadata["dark-mode-logo"] }}';
+            const lightModeLogoUrl = '{{ metadata.logo }}';
+            
+            if (theme.value === 'dark' && darkModeLogoUrl) {
+                logo.src = darkModeLogoUrl;
+            } else {
+                logo.src = lightModeLogoUrl;
+            }
+        };
+        
+        const theme = {
+            value: getColorPreference(),
+        };
+        
+        reflectPreference();
+        
+        window.onload = () => {
+            reflectPreference();
+            document.querySelector('#theme-toggle').addEventListener('click', () => {
+                theme.value = theme.value === 'light' ? 'dark' : 'light';
+                setPreference();
+            });
+        };
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({matches:isDark}) => {
+            theme.value = isDark ? 'dark' : 'light';
+            setPreference();
+        });
+    </script>
+</body>
+</html>
