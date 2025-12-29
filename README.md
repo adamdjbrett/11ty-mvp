@@ -12,5 +12,11 @@
 1. Pagination
 2. Tags
 
+## Run
+* open terminal
+* cd into the folder
+* npm install
+* npx @11ty/eleventy --serve
+
 ## Contact
 info at adamdjbrett.com
